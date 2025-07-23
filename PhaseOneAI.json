@@ -1,0 +1,706 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2abe589e-95f4-428f-8038-68b0990caf5c",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e58f7962-09fd-4c17-9eed-367a5860d899",
+      "name": "Webhook",
+      "webhookId": "2abe589e-95f4-428f-8038-68b0990caf5c"
+    },
+    {
+      "parameters": {
+        "jsCode": " // Extract the 'answers' array from the incoming data.\n// Based on your webhook output, it's nested under 'body.body'.\nlet combinedData = {};\nconst answers = $input.item.json.body.body.answers;\nconst finalCombinedData = {\n    email: combinedData.email || '',\n    name: combinedData.name || '',\n    totalScore: combinedData.totalScore || 0,\n    categoryName: combinedData.categoryName || '',\n    actionPlanTitle: combinedData.actionPlanTitle || '',\n    categoryDescription: combinedData.categoryDescription || '',\n    categoryActionPoints: combinedData.categoryActionPoints || '',\n    actionPlanContent: combinedData.actionPlanContent || '',\n    aiPrompt: combinedData.aiPrompt || '' // Keep aiPrompt if needed later\n};\n\n// Initialize a variable to store the running total score.\nlet totalScore = 0;\n\n// Loop through each 'answer' object within the 'answers' array.\nfor (const answer of answers) {\n  totalScore += answer.answer_value;\n}\n\n// Define the output data for the next nodes in the workflow.\n// We pass along the original user's email and name,\n// and the newly calculated 'totalScore'.\nreturn [{\n  json: {\n    email: $input.item.json.body.body.email, // Access email from body.body\n    name: $input.item.json.body.body.name,   // Access name from body.body\n    totalScore: totalScore\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "d4cd8137-c2f1-454a-9bac-c313a58b5c5a",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9a2aee73-9c29-4f7d-9988-0ea07faaaf50",
+              "leftValue": "={{ $json.totalScore }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "47c0b8fa-e0c6-470e-8f2e-a2eafbe6972e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e95b31dd-9eda-4a78-ad82-d24fa8357019",
+              "name": "categoryName",
+              "value": "=AI Explorer",
+              "type": "string"
+            },
+            {
+              "id": "45f5308e-23a2-47e3-914d-384e19c08edf",
+              "name": "actionPlanTitle",
+              "value": "=Your AI Readiness Action Plan: Getting Started",
+              "type": "string"
+            },
+            {
+              "id": "a56ed120-5e33-402e-a65e-85006fb9ca05",
+              "name": "aiPrompt",
+              "value": " Generate a concise, 3-point beginner AI action plan for {{ $json.name }} based on their AI Explorer stage assessment outcome. Focus on documenting processes and organizing data. ",
+              "type": "string"
+            },
+            {
+              "id": "8adf3c92-f28e-49db-b6f4-4b3912d634b1",
+              "name": "categoryDescription",
+              "value": "=Your business is in the early stages of AI readiness. While you've taken the first step by considering AI, you have significant opportunities to build foundations that will support successful implementation. Currently, your processes, data systems, or readiness would likely create barriers to effective AI adoption. \n\n",
+              "type": "string"
+            },
+            {
+              "id": "2433dd89-5488-4787-a702-46fb4333a9c8",
+              "name": "categoryActionPoints",
+              "value": "=1. Start documenting key business processes that consume the most time\n2. Begin centralizing and organizing your business data\n3. Invest in basic AI awareness training for your team\n4. Book a PhaseOne AI consultation to identify quick wins\n5. Develop a 12-month technology roadmap with expert guidance ",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        660,
+        -100
+      ],
+      "id": "c62b545d-205a-4531-88f7-b0fb0ee96ce6",
+      "name": "Set Beginner Content"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "11568180-f7df-4b5f-9af7-d21bf289e145",
+              "leftValue": "={{ $json.totalScore }}",
+              "rightValue": 20,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        100
+      ],
+      "id": "09a08415-b3ab-42f8-8c8d-b8b041712066",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d497cc42-f606-473f-96a2-e94db8c6343d",
+              "name": "categoryName",
+              "value": "AI Adapter ",
+              "type": "string"
+            },
+            {
+              "id": "3ca933f8-8841-4a96-aacd-0208e9ae1bd5",
+              "name": "actionPlanTitle",
+              "value": "Your AI Readiness Action Plan: Scaling Up",
+              "type": "string"
+            },
+            {
+              "id": "39552ed2-1c4c-4408-a7f2-6aeaddb2992b",
+              "name": "categoryDescription",
+              "value": "=Your business has established some essential foundations for AI adoption. You have moderate readiness in key areas but need targeted improvements before fully leveraging AI. With strategic guidance, you could quickly advance to higher-level implementations that deliver significant value.",
+              "type": "string"
+            },
+            {
+              "id": "86cb6bc9-62b1-4bf7-bca8-6dd150561afc",
+              "name": "categoryActionPoints",
+              "value": "=1. Complete documentation of any remaining critical processes  \n2. Enhance data quality and accessibility where gaps exist  \n3. Identify 2–3 specific AI use cases for immediate piloting  \n4. Schedule a PhaseOne AI workshop to develop an implementation strategy  \n5. Allocate resources for a test implementation within 3–6 months\n",
+              "type": "string"
+            },
+            {
+              "id": "4f7bdf9e-13cc-4a68-a8cd-8d3b97e55974",
+              "name": "aiPrompt",
+              "value": "=Generate a concise, 3-point advanced AI action plan for Advanced User based on their AI Innovator stage assessment outcome. Focus on prioritizing high-value AI applications and vendor selection.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        0
+      ],
+      "id": "139e94e7-a6cf-4812-b427-85da632cca3b",
+      "name": "Set Intermediate Content"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "80395e4f-f49c-4ad6-93da-2fbd8e980de6",
+              "name": "categoryName",
+              "value": "AI Innovator",
+              "type": "string"
+            },
+            {
+              "id": "3ee417b4-3213-4e48-a1f7-369f24b7ca0b",
+              "name": "actionPlanTitle",
+              "value": "Your AI Readiness Action Plan: Leading the Way",
+              "type": "string"
+            },
+            {
+              "id": "fba18490-fd8e-4633-80e1-2a6533097f89",
+              "name": "aiPrompt",
+              "value": "=Generate a concise, 3-point advanced AI action plan for {{ $json.name }} based on their AI Innovator stage assessment outcome. Focus on prioritizing high-value AI applications and vendor selection.",
+              "type": "string"
+            },
+            {
+              "id": "4865df7a-7389-4405-a57c-5ed45fe273f7",
+              "name": "categoryDescription",
+              "value": "=Your business demonstrates strong AI readiness fundamentals. You've established the necessary foundations across process documentation, data management, team capabilities, and strategic alignment. You're well-positioned to implement AI solutions that could transform your business operations.",
+              "type": "string"
+            },
+            {
+              "id": "7ba5631a-7eb5-477e-8149-3b24e750d8ed",
+              "name": "categoryActionPoints",
+              "value": "=1. Book a PhaseOne AI strategic session to prioritize high-value AI applications.\n2. Begin vendor selection for your first implementation\n3. Develop advanced measurement frameworks to track AI ROI\n4. Create a change management plan for smooth integration\n5. Explore industry-specific AI innovations with expert guidance",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        200
+      ],
+      "id": "fba3f7ff-444c-4a1c-ab2f-2703dcc639a5",
+      "name": "Set Advanced Content"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        20
+      ],
+      "id": "9f0aa673-04fa-4342-9570-def6fefb9459",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.aiPrompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1540,
+        -60
+      ],
+      "id": "0763da20-4bb7-4663-9209-87f6cba5fc92",
+      "name": "Generate AI Action Plan",
+      "credentials": {
+        "openAiApi": {
+          "id": "Gk5y4w57jqCnqSYZ",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Merge').item.json.email }}",
+        "subject": "={{ $('Merge').item.json.actionPlanTitle }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n<title>Your AI Readiness Action Plan</title>\n<style>\n    /* Optional basic styling for email readability */\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }\n    p { margin-bottom: 10px; }\n    strong { color: #0056b3; }\n    hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }\n    .footer { font-size: 0.8em; color: #888; }\n    .section-header { font-weight: bold; margin-top: 15px; margin-bottom: 5px; color: #0056b3; } /* Added for clarity */\n    .action-points-list { \n        margin-top: 10px; \n        background-color: #f9f9f9; \n        padding: 15px; \n        padding-left: 35px; /* Adjust for list bullets */\n        border-left: 3px solid #007bff; \n        list-style-type: decimal; /* Changed to decimal for numbered list */\n    } \n    .action-points-list li {\n        margin-bottom: 8px;\n    }\n</style>\n</head>\n<body>\n<p>Hi {{ $json.name }},</p>\n<p>Thank you for completing our AI Readiness Assessment!</p>\n\n\n<p><strong>Your AI Readiness Category:</strong>{{ $('Merge').item.json.categoryName }} </p>\n<p><strong>Your Total Score:</strong> {{ $('Merge').item.json.totalScore }} / 30</p> <p class=\"section-header\"> </p>\n\n<ol class=\"action-points-list\"> {{ $('Merge').item.json.categoryDescription }} </ol>\n\n<hr>\n<p class=\"section-header\">Your Personalized AI Action Plan (from AI):</p>\n<p>{{ $('Merge').item.json.categoryActionPoints }}</p>\n<hr>\n\n<p>We hope this helps you on your AI journey!</p>\n<p>Best regards,<br>Phase One AI</p>\n<br>\n<p class=\"footer\">This email was sent automatically with n8n.</p>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2240,
+        -60
+      ],
+      "id": "70c6e6cb-7e8c-4496-bc8e-9fd20e6eb778",
+      "name": "Send Action Plan Email",
+      "webhookId": "059482a0-25cd-4a6d-b7db-96f2c94ba129",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DEqjbyMj8JfZvN4y",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f3d25014-678f-441d-b0c6-97ad25b49638",
+              "name": "actionPlanContent",
+              "value": "={{ $json.message.content }}",
+              "type": "string"
+            },
+            {
+              "id": "f1602fe1-a6c2-4ad2-b354-22c9fb89493c",
+              "name": "email",
+              "value": "={{ $('Merge').item.json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "3385f71e-76a1-4dda-9aff-500c8292384f",
+              "name": "actionPlanTitle",
+              "value": "={{ $('Merge').item.json.actionPlanTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "18a75cb5-ed59-41a0-86a7-3238491012ef",
+              "name": "name",
+              "value": "={{ $('Merge').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2d9b1449-bd65-47e0-b2ca-21b1581c27ca",
+              "name": "totalScore",
+              "value": "={{ $('Merge').item.json.totalScore }}",
+              "type": "string"
+            },
+            {
+              "id": "e0a018f3-6280-47c1-8c20-fdcdcc4aa749",
+              "name": "CategoryName",
+              "value": "={{ $('Merge').item.json.categoryName }}",
+              "type": "string"
+            },
+            {
+              "id": "4ed7f673-9d9a-4d46-9c18-7c47152d3ba2",
+              "name": "CategoryDescription",
+              "value": "={{ $('Merge').item.json.categoryDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "b6fd2509-f975-46d8-9c9e-4fa159f1bd4d",
+              "name": "categoryActionPoints",
+              "value": "={{ $('Merge').item.json.categoryActionPoints }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1980,
+        -60
+      ],
+      "id": "ee883423-6e86-4079-818e-9e98e3bfadfb",
+      "name": "Extract Action Plan Content"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": " {\"status\": \"success\", \"message\": \"Assessment processed successfully!\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2820,
+        -60
+      ],
+      "id": "8bc05042-37b1-4e91-94f8-51dc8d499c45",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1hN3MhvKNcVM4JQIlTw4Go-iGfYuzE48LVnmDKODkJas/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "n8nSheet",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "= {{ $('Merge').item.json.name }}",
+            "Email": "= {{ $('Merge').item.json.email }}",
+            "Total Score": "= {{ $('Merge').item.json.totalScore }}",
+            "Category": "={{ $('Merge').item.json.categoryName }} ",
+            "Category Action Points": "= {{ $('Merge').item.json.categoryActionPoints }}",
+            "Category Description": "= {{ $('Merge').item.json.categoryDescription }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Total Score",
+              "displayName": "Total Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category Description",
+              "displayName": "Category Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category Action Points",
+              "displayName": "Category Action Points",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2520,
+        -60
+      ],
+      "id": "80b3a172-6957-4c94-8e6d-22577af60bf9",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "AFBlwVaNdF5YDGqz",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=🎉 New ADVANCED AI Lead Alert! 🎉\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nTotal Score: {{ $json.totalScore }} / 30\nCategory: {{ $json.categoryName }}\n\nAI Action Plan Title: {{ $json.actionPlanTitle }}",
+        "options": {
+          "username": "AI Lead Notifier"
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        300
+      ],
+      "id": "13c16467-e53d-4959-bb65-72ebd8c6a7dc",
+      "name": "Discord",
+      "webhookId": "4af52cca-34df-4251-a0cf-3fb3c4dc976a",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "arK35VGlXsXXM5be",
+          "name": "Discord Webhook account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Extract Action Plan Content": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Set Beginner Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Set Intermediate Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Advanced Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Beginner Content": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Intermediate Content": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Advanced Content": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Action Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Action Plan": {
+      "main": [
+        [
+          {
+            "node": "Extract Action Plan Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Action Plan Content": {
+      "main": [
+        [
+          {
+            "node": "Send Action Plan Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Action Plan Email": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "58b8c73d-9262-4b2f-8a4b-b906fff514d7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b0e8ad41943b0065e9f70fe98b7be8e248da60d4f5e7a0c8a2420f6137de3b7b"
+  },
+  "id": "U8SrLKEqtEmCRZz3",
+  "tags": []
+}

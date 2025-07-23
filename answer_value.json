@@ -1,0 +1,134 @@
+ {
+  "assessment": {
+    "questions": [
+      {
+        "id": 1,
+        "question": "How frequently do you evaluate new technology for your business?",
+        "options": [
+          {"text": "When forced by external factors.", "value": 1},
+          {"text": "Every 1-2 years.", "value": 2},
+          {"text": "Continuously as part of business strategy.", "value": 3}
+        ]
+      },
+      {
+        "id": 2,
+        "question": "How are your business processes currently documented?",
+        "options": [
+          {"text": "Undocumented. Everyone has their own.", "value": 1},
+          {"text": "Some documentation. Inconsistent or outdated.", "value": 2},
+          {"text": "Well-documented processes across most areas.", "value": 3}
+        ]
+      },
+      {
+        "id": 3,
+        "question": "How would you describe your business data management?",
+        "options": [
+          {"text": "Unorganized. Scattered across systems/paper.", "value": 1},
+          {"text": "Digital but disorganized. Limited accessibility.", "value": 2},
+          {"text": "Well-organized, centralized, and easily accessible.", "value": 3}
+        ]
+      },
+      {
+        "id": 4,
+        "question": "How do you typically respond to new technology?",
+        "options": [
+          {"text": "Significant resistance or anxiety.", "value": 1},
+          {"text": "Cautious interest with some hesitation.", "value": 2},
+          {"text": "Enthusiastic and eager to learn.", "value": 3}
+        ]
+      },
+      {
+        "id": 5,
+        "question": "How much time do repetitive, manual tasks consume in your business?",
+        "options": [
+          {"text": "A significant portion of our time.", "value": 1},
+          {"text": "Some repetitive tasks remain.", "value": 2},
+          {"text": "Most repetitive processes already streamlined.", "value": 3}
+        ]
+      },
+      {
+        "id": 6,
+        "question": "What is your approach to technology investments?",
+        "options": [
+          {"text": "Avoid unless absolutely necessary.", "value": 1},
+          {"text": "Willing but cautious about costs.", "value": 2},
+          {"text": "Actively budget for technology improvements.", "value": 3}
+        ]
+      },
+      {
+        "id": 7,
+        "question": "How do you currently measure business performance?",
+        "options": [
+          {"text": "No formal tracking or KPIs.", "value": 1},
+          {"text": "Basic metrics like revenue only.", "value": 2},
+          {"text": "Comprehensive KPIs across business areas.", "value": 3}
+        ]
+      },
+      {
+        "id": 8,
+        "question": "What is your timeline for exploring AI implementations?",
+        "options": [
+          {"text": "No plans. Just exploring options.", "value": 1},
+          {"text": "Within 6-12 months.", "value": 2},
+          {"text": "Now or within next 3 months.", "value": 3}
+        ]
+      },
+      {
+        "id": 9,
+        "question": "How would you describe your business's competitive landscape regarding technology?",
+        "options": [
+          {"text": "Competitors don't use advanced tech.", "value": 1},
+          {"text": "Some competitors have started. Moderate pressure.", "value": 2},
+          {"text": "Many competitors using tech. High pressure.", "value": 3}
+        ]
+      },
+      {
+        "id": 10,
+        "question": "What resources could you allocate to AI implementation and training?",
+        "options": [
+          {"text": "Minimal budget and time.", "value": 1},
+          {"text": "Moderate resources if value demonstrated.", "value": 2},
+          {"text": "Dedicated budget and staff time already.", "value": 3}
+        ]
+      }
+    ],
+    "outcomes": {
+      "beginner": {
+        "score_range": "10-16 points",
+        "title": "AI Explorer",
+        "description": "Your business is in the early stages of AI readiness. While you've taken the first step by considering AI, you have significant opportunities to build foundations that will support successful implementation. Currently, your processes, data systems, or readiness would likely create barriers to effective AI adoption.",
+        "action_points": [
+          "Start documenting key business processes that consume the most time",
+          "Begin centralizing and organizing your business data",
+          "Invest in basic AI awareness training for your team",
+          "Book a PhaseOne AI consultation to identify quick wins",
+          "Develop a 12-month technology roadmap with expert guidance"
+        ]
+      },
+      "intermediate": {
+        "score_range": "17-23 points",
+        "title": "AI Adapter",
+        "description": "Your business has established some essential foundations for AI adoption. You have moderate readiness in key areas but need targeted improvements before fully leveraging AI. With strategic guidance, you could quickly advance to higher-level implementations that deliver significant value.",
+        "action_points": [
+          "Complete documentation of any remaining critical processes",
+          "Enhance data quality and accessibility where gaps exist",
+          "Identify 2-3 specific AI use cases for immediate piloting",
+          "Schedule a PhaseOne AI workshop to develop an implementation strategy",
+          "Allocate resources for a test implementation within 3-6 months"
+        ]
+      },
+      "advanced": {
+        "score_range": "24-30 points",
+        "title": "AI Innovator",
+        "description": "Your business demonstrates strong AI readiness fundamentals. You've established the necessary foundations across process documentation, data management, team capabilities, and strategic alignment. You're well-positioned to implement AI solutions that could transform your business operations.",
+        "action_points": [
+          "Book a PhaseOne AI strategic session to prioritize high-value AI applications.",
+          "Begin vendor selection for your first implementation",
+          "Develop advanced measurement frameworks to track AI ROI",
+          "Create a change management plan for smooth integration",
+          "Explore industry-specific AI innovations with expert guidance"
+        ]
+      }
+    }
+  }
+}
