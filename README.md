@@ -7,6 +7,6 @@
 ![Test page](TestPage6.png)
 ![Test page](TestPage7.png)
 
-#Discord Alert
+# Discord Alert
 ![Discord alert](DiscordAlert2.png)
 
